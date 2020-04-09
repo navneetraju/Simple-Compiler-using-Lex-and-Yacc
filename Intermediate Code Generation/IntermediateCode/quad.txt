@@ -1,0 +1,36 @@
+	=		2		  		i
+	>		i		1		t0
+	ifFalse		t0		  		L0
+	+		i		1		t1
+	=		t1		  		i
+	goto		  		  		L0
+	Label		  		  		L0
+	-		i		1		t2
+	=		t2		  		i
+	Label		  		  		L1
+	+		i		3		t3
+	=		t3		  		i
+	=		t3		  		i
+	Label		  		  		L2
+	<		i		10		t4
+	ifFalse		t4		  		L3
+	+		i		2		t5
+	=		t5		  		a
+	+		i		1 		t6
+	=		t6		  		i
+	goto		  		  		L2
+	Label		  		  		L3
+	*		a		3		t7
+	+		t7		4		t8
+	=		t8		  		a
+	=		t8		  		i
+	Label		  		  		L4
+	<		i		11		t9
+	ifFalse		t9		  		L5
+	-		i		2		t10
+	=		t10		  		a
+	goto		  		  		L4
+	Label		  		  		L5
+	*		2		a		t11
+	+		i		t11		t12
+	=		t12		  		a
