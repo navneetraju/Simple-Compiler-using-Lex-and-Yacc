@@ -33,12 +33,6 @@ def printICG(list_of_lines):
     for i in list_of_lines:
         print(i.strip())
 
-def listToString(s):  
-    str1 = ""  
-    for ele in s:  
-        str1 += ele    
-    return str1 
-
 def add_to_dict(x,y):
     temp_vars[x]=y
 
