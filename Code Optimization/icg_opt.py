@@ -2,8 +2,8 @@ import re
 import sys
 import operator
 
-istemp = lambda s : bool(re.match(r"^t[0-9]*$", s)) 		#temporary variable
-isid = lambda s : bool(re.match(r"^[A-Za-z][A-Za-z0-9_]*$", s)) #id + temporary variable
+istemp = lambda s : bool(re.match(r"^t[0-9]*$", s)) 		
+isid = lambda s : bool(re.match(r"^[A-Za-z][A-Za-z0-9_]*$", s)) 
 
 if len(sys.argv) == 2 :
 	icg_file = str(sys.argv[1])
