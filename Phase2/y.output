@@ -1,0 +1,2302 @@
+Terminals unused in grammar
+
+   operator
+   new_line
+
+
+Rules useless in parser due to conflicts
+
+   22 assignment_expression_with_null: assignment_expression
+
+
+State 9 conflicts: 1 shift/reduce
+State 19 conflicts: 1 shift/reduce
+State 24 conflicts: 16 shift/reduce
+State 25 conflicts: 16 shift/reduce
+State 26 conflicts: 16 shift/reduce
+State 27 conflicts: 16 shift/reduce
+State 28 conflicts: 16 shift/reduce
+State 33 conflicts: 1 shift/reduce
+State 46 conflicts: 1 shift/reduce
+State 51 conflicts: 16 shift/reduce
+State 52 conflicts: 16 shift/reduce
+State 75 conflicts: 1 shift/reduce
+State 79 conflicts: 1 shift/reduce
+State 85 conflicts: 1 shift/reduce
+State 89 conflicts: 16 shift/reduce
+State 90 conflicts: 16 shift/reduce
+State 91 conflicts: 16 shift/reduce
+State 94 conflicts: 1 shift/reduce
+State 96 conflicts: 1 shift/reduce
+State 106 conflicts: 16 shift/reduce
+State 132 conflicts: 16 shift/reduce
+
+
+Grammar
+
+    0 $accept: main_block $end
+
+    1 main_block: declaratio main_x '(' ')' body
+
+    2 body: '{' multiple_expressions '}' multiple_expressions
+    3     | expression multiple_expressions
+    4     | logical_expression multiple_expressions
+    5     | if multiple_expressions
+    6     | error ';'
+    7     | for multiple_expressions
+    8     | while multiple_expressions
+    9     | printf
+   10     | '{' '}'
+   11     | return_x number ';'
+   12     | %empty
+
+   13 for: for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' '{' multiple_expressions '}'
+   14    | for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' expression
+   15    | for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' logical_expression
+
+   16 if: if_x '(' extended_logical_expression ')' body
+
+   17 for: for_x '(' assignment_expression_with_null ';' extended_logical_expression_with_null ';' extended_logical_expression_with_null ')' body
+
+   18 while: while_x '(' identifier comparisionop identifier ')'
+   19      | while_x '(' identifier comparisionop number ')'
+
+   20 extended_logical_expression_with_null: extended_logical_expression
+   21                                      | %empty
+
+   22 assignment_expression_with_null: assignment_expression
+   23                                | %empty
+
+   24 multiple_expressions: logical_expression ';' multiple_expressions
+   25                     | expression ';' multiple_expressions
+   26                     | body
+
+   27 logical_expression: comparision_expression logicalop extended_logical_expression
+   28                   | assignment_expression logicalop extended_logical_expression
+   29                   | RHS logicalop extended_logical_expression
+
+   30 extended_logical_expression: logical_expression
+   31                            | comparision_expression
+   32                            | assignment_expression
+   33                            | RHS
+
+   34 expression: comparision_expression ';'
+   35           | assignment_expression ';'
+   36           | declaration_statement ';'
+   37           | RHS
+
+   38 comparision_expression: RHS comparisionop RHS
+
+   39 assignment_expression: declaration_statement assignmentop RHS
+   40                      | identifier assignmentop RHS
+
+   41 declaration_statement: declaratio identifier
+   42                      | declaration_statement ',' pointers identifier
+
+   43 printf: printf_x '(' '"' identifier '"' ')' ';'
+   44       | printf_x '(' '"' identifier '"' multiple_ids ')' ';'
+
+   45 multiple_ids: ',' identifier multiple_ids
+   46             | ',' identifier
+
+   47 pointers: pointers '*'
+   48         | %empty
+
+   49 RHS: '(' RHS ')'
+   50    | RHS '+' RHS
+   51    | RHS '-' RHS
+   52    | RHS '/' RHS
+   53    | RHS '*' RHS
+   54    | RHS '%' RHS
+   55    | F
+
+   56 F: identifier
+   57  | '*' identifier
+   58  | '&' identifier
+   59  | '~' identifier
+   60  | '!' identifier
+   61  | identifier unary
+   62  | unary identifier
+   63  | number
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'!' (33) 60
+'"' (34) 43 44
+'%' (37) 54
+'&' (38) 58
+'(' (40) 1 13 14 15 16 17 18 19 43 44 49
+')' (41) 1 13 14 15 16 17 18 19 43 44 49
+'*' (42) 47 53 57
+'+' (43) 50
+',' (44) 42 45 46
+'-' (45) 51
+'/' (47) 52
+';' (59) 6 11 13 14 15 17 24 25 34 35 36 43 44
+'{' (123) 2 10 13
+'}' (125) 2 10 13
+'~' (126) 59
+error (256) 6
+declaratio (258) 1 41
+identifier (259) 18 19 40 41 42 43 44 45 46 56 57 58 59 60 61 62
+unary (260) 61 62
+operator (261)
+number (262) 11 19 63
+assignmentop (263) 39 40
+comparisionop (264) 18 19 38
+logicalop (265) 27 28 29
+while_x (266) 18 19
+for_x (267) 13 14 15 17
+if_x (268) 16
+main_x (269) 1
+printf_x (270) 43 44
+return_x (271) 11
+new_line (272)
+
+
+Nonterminals, with rules where they appear
+
+$accept (33)
+    on left: 0
+main_block (34)
+    on left: 1, on right: 0
+body (35)
+    on left: 2 3 4 5 6 7 8 9 10 11 12, on right: 1 16 17 26
+for (36)
+    on left: 13 14 15 17, on right: 7
+if (37)
+    on left: 16, on right: 5
+while (38)
+    on left: 18 19, on right: 8
+extended_logical_expression_with_null (39)
+    on left: 20 21, on right: 17
+assignment_expression_with_null (40)
+    on left: 22 23, on right: 17
+multiple_expressions (41)
+    on left: 24 25 26, on right: 2 3 4 5 7 8 13 24 25
+logical_expression (42)
+    on left: 27 28 29, on right: 4 15 24 30
+extended_logical_expression (43)
+    on left: 30 31 32 33, on right: 13 14 15 16 20 27 28 29
+expression (44)
+    on left: 34 35 36 37, on right: 3 14 25
+comparision_expression (45)
+    on left: 38, on right: 27 31 34
+assignment_expression (46)
+    on left: 39 40, on right: 13 14 15 22 28 32 35
+declaration_statement (47)
+    on left: 41 42, on right: 36 39 42
+printf (48)
+    on left: 43 44, on right: 9
+multiple_ids (49)
+    on left: 45 46, on right: 44 45
+pointers (50)
+    on left: 47 48, on right: 42 47
+RHS (51)
+    on left: 49 50 51 52 53 54 55, on right: 29 33 37 38 39 40 49 50
+    51 52 53 54
+F (52)
+    on left: 56 57 58 59 60 61 62 63, on right: 55
+
+
+State 0
+
+    0 $accept: . main_block $end
+
+    declaratio  shift, and go to state 1
+
+    main_block  go to state 2
+
+
+State 1
+
+    1 main_block: declaratio . main_x '(' ')' body
+
+    main_x  shift, and go to state 3
+
+
+State 2
+
+    0 $accept: main_block . $end
+
+    $end  shift, and go to state 4
+
+
+State 3
+
+    1 main_block: declaratio main_x . '(' ')' body
+
+    '('  shift, and go to state 5
+
+
+State 4
+
+    0 $accept: main_block $end .
+
+    $default  accept
+
+
+State 5
+
+    1 main_block: declaratio main_x '(' . ')' body
+
+    ')'  shift, and go to state 6
+
+
+State 6
+
+    1 main_block: declaratio main_x '(' ')' . body
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $end  reduce using rule 12 (body)
+
+    body                    go to state 23
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    logical_expression      go to state 27
+    expression              go to state 28
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 7
+
+    6 body: error . ';'
+
+    ';'  shift, and go to state 35
+
+
+State 8
+
+   41 declaration_statement: declaratio . identifier
+
+    identifier  shift, and go to state 36
+
+
+State 9
+
+   40 assignment_expression: identifier . assignmentop RHS
+   56 F: identifier .
+   61  | identifier . unary
+
+    unary         shift, and go to state 37
+    assignmentop  shift, and go to state 38
+
+    unary     [reduce using rule 56 (F)]
+    $default  reduce using rule 56 (F)
+
+
+State 10
+
+   62 F: unary . identifier
+
+    identifier  shift, and go to state 39
+
+
+State 11
+
+   63 F: number .
+
+    $default  reduce using rule 63 (F)
+
+
+State 12
+
+   18 while: while_x . '(' identifier comparisionop identifier ')'
+   19      | while_x . '(' identifier comparisionop number ')'
+
+    '('  shift, and go to state 40
+
+
+State 13
+
+   13 for: for_x . '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' '{' multiple_expressions '}'
+   14    | for_x . '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' expression
+   15    | for_x . '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' logical_expression
+   17    | for_x . '(' assignment_expression_with_null ';' extended_logical_expression_with_null ';' extended_logical_expression_with_null ')' body
+
+    '('  shift, and go to state 41
+
+
+State 14
+
+   16 if: if_x . '(' extended_logical_expression ')' body
+
+    '('  shift, and go to state 42
+
+
+State 15
+
+   43 printf: printf_x . '(' '"' identifier '"' ')' ';'
+   44       | printf_x . '(' '"' identifier '"' multiple_ids ')' ';'
+
+    '('  shift, and go to state 43
+
+
+State 16
+
+   11 body: return_x . number ';'
+
+    number  shift, and go to state 44
+
+
+State 17
+
+   57 F: '*' . identifier
+
+    identifier  shift, and go to state 45
+
+
+State 18
+
+   49 RHS: '(' . RHS ')'
+
+    identifier  shift, and go to state 46
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    RHS  go to state 47
+    F    go to state 34
+
+
+State 19
+
+    2 body: '{' . multiple_expressions '}' multiple_expressions
+   10     | '{' . '}'
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    '}'         shift, and go to state 48
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    '}'  [reduce using rule 12 (body)]
+
+    body                    go to state 49
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    multiple_expressions    go to state 50
+    logical_expression      go to state 51
+    expression              go to state 52
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 20
+
+   58 F: '&' . identifier
+
+    identifier  shift, and go to state 53
+
+
+State 21
+
+   59 F: '~' . identifier
+
+    identifier  shift, and go to state 54
+
+
+State 22
+
+   60 F: '!' . identifier
+
+    identifier  shift, and go to state 55
+
+
+State 23
+
+    1 main_block: declaratio main_x '(' ')' body .
+
+    $default  reduce using rule 1 (main_block)
+
+
+State 24
+
+    7 body: for . multiple_expressions
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $end        reduce using rule 12 (body)
+    error       [reduce using rule 12 (body)]
+    declaratio  [reduce using rule 12 (body)]
+    identifier  [reduce using rule 12 (body)]
+    unary       [reduce using rule 12 (body)]
+    number      [reduce using rule 12 (body)]
+    while_x     [reduce using rule 12 (body)]
+    for_x       [reduce using rule 12 (body)]
+    if_x        [reduce using rule 12 (body)]
+    printf_x    [reduce using rule 12 (body)]
+    return_x    [reduce using rule 12 (body)]
+    '*'         [reduce using rule 12 (body)]
+    '('         [reduce using rule 12 (body)]
+    '{'         [reduce using rule 12 (body)]
+    '}'         reduce using rule 12 (body)
+    '&'         [reduce using rule 12 (body)]
+    '~'         [reduce using rule 12 (body)]
+    '!'         [reduce using rule 12 (body)]
+
+    body                    go to state 49
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    multiple_expressions    go to state 56
+    logical_expression      go to state 51
+    expression              go to state 52
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 25
+
+    5 body: if . multiple_expressions
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $end        reduce using rule 12 (body)
+    error       [reduce using rule 12 (body)]
+    declaratio  [reduce using rule 12 (body)]
+    identifier  [reduce using rule 12 (body)]
+    unary       [reduce using rule 12 (body)]
+    number      [reduce using rule 12 (body)]
+    while_x     [reduce using rule 12 (body)]
+    for_x       [reduce using rule 12 (body)]
+    if_x        [reduce using rule 12 (body)]
+    printf_x    [reduce using rule 12 (body)]
+    return_x    [reduce using rule 12 (body)]
+    '*'         [reduce using rule 12 (body)]
+    '('         [reduce using rule 12 (body)]
+    '{'         [reduce using rule 12 (body)]
+    '}'         reduce using rule 12 (body)
+    '&'         [reduce using rule 12 (body)]
+    '~'         [reduce using rule 12 (body)]
+    '!'         [reduce using rule 12 (body)]
+
+    body                    go to state 49
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    multiple_expressions    go to state 57
+    logical_expression      go to state 51
+    expression              go to state 52
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 26
+
+    8 body: while . multiple_expressions
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $end        reduce using rule 12 (body)
+    error       [reduce using rule 12 (body)]
+    declaratio  [reduce using rule 12 (body)]
+    identifier  [reduce using rule 12 (body)]
+    unary       [reduce using rule 12 (body)]
+    number      [reduce using rule 12 (body)]
+    while_x     [reduce using rule 12 (body)]
+    for_x       [reduce using rule 12 (body)]
+    if_x        [reduce using rule 12 (body)]
+    printf_x    [reduce using rule 12 (body)]
+    return_x    [reduce using rule 12 (body)]
+    '*'         [reduce using rule 12 (body)]
+    '('         [reduce using rule 12 (body)]
+    '{'         [reduce using rule 12 (body)]
+    '}'         reduce using rule 12 (body)
+    '&'         [reduce using rule 12 (body)]
+    '~'         [reduce using rule 12 (body)]
+    '!'         [reduce using rule 12 (body)]
+
+    body                    go to state 49
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    multiple_expressions    go to state 58
+    logical_expression      go to state 51
+    expression              go to state 52
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 27
+
+    4 body: logical_expression . multiple_expressions
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $end        reduce using rule 12 (body)
+    error       [reduce using rule 12 (body)]
+    declaratio  [reduce using rule 12 (body)]
+    identifier  [reduce using rule 12 (body)]
+    unary       [reduce using rule 12 (body)]
+    number      [reduce using rule 12 (body)]
+    while_x     [reduce using rule 12 (body)]
+    for_x       [reduce using rule 12 (body)]
+    if_x        [reduce using rule 12 (body)]
+    printf_x    [reduce using rule 12 (body)]
+    return_x    [reduce using rule 12 (body)]
+    '*'         [reduce using rule 12 (body)]
+    '('         [reduce using rule 12 (body)]
+    '{'         [reduce using rule 12 (body)]
+    '}'         reduce using rule 12 (body)
+    '&'         [reduce using rule 12 (body)]
+    '~'         [reduce using rule 12 (body)]
+    '!'         [reduce using rule 12 (body)]
+
+    body                    go to state 49
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    multiple_expressions    go to state 59
+    logical_expression      go to state 51
+    expression              go to state 52
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 28
+
+    3 body: expression . multiple_expressions
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $end        reduce using rule 12 (body)
+    error       [reduce using rule 12 (body)]
+    declaratio  [reduce using rule 12 (body)]
+    identifier  [reduce using rule 12 (body)]
+    unary       [reduce using rule 12 (body)]
+    number      [reduce using rule 12 (body)]
+    while_x     [reduce using rule 12 (body)]
+    for_x       [reduce using rule 12 (body)]
+    if_x        [reduce using rule 12 (body)]
+    printf_x    [reduce using rule 12 (body)]
+    return_x    [reduce using rule 12 (body)]
+    '*'         [reduce using rule 12 (body)]
+    '('         [reduce using rule 12 (body)]
+    '{'         [reduce using rule 12 (body)]
+    '}'         reduce using rule 12 (body)
+    '&'         [reduce using rule 12 (body)]
+    '~'         [reduce using rule 12 (body)]
+    '!'         [reduce using rule 12 (body)]
+
+    body                    go to state 49
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    multiple_expressions    go to state 60
+    logical_expression      go to state 51
+    expression              go to state 52
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 29
+
+   27 logical_expression: comparision_expression . logicalop extended_logical_expression
+   34 expression: comparision_expression . ';'
+
+    logicalop  shift, and go to state 61
+    ';'        shift, and go to state 62
+
+
+State 30
+
+   28 logical_expression: assignment_expression . logicalop extended_logical_expression
+   35 expression: assignment_expression . ';'
+
+    logicalop  shift, and go to state 63
+    ';'        shift, and go to state 64
+
+
+State 31
+
+   36 expression: declaration_statement . ';'
+   39 assignment_expression: declaration_statement . assignmentop RHS
+   42 declaration_statement: declaration_statement . ',' pointers identifier
+
+    assignmentop  shift, and go to state 65
+    ';'           shift, and go to state 66
+    ','           shift, and go to state 67
+
+
+State 32
+
+    9 body: printf .
+
+    $default  reduce using rule 9 (body)
+
+
+State 33
+
+   29 logical_expression: RHS . logicalop extended_logical_expression
+   37 expression: RHS .
+   38 comparision_expression: RHS . comparisionop RHS
+   50 RHS: RHS . '+' RHS
+   51    | RHS . '-' RHS
+   52    | RHS . '/' RHS
+   53    | RHS . '*' RHS
+   54    | RHS . '%' RHS
+
+    comparisionop  shift, and go to state 68
+    logicalop      shift, and go to state 69
+    '+'            shift, and go to state 70
+    '-'            shift, and go to state 71
+    '/'            shift, and go to state 72
+    '*'            shift, and go to state 73
+    '%'            shift, and go to state 74
+
+    '*'       [reduce using rule 37 (expression)]
+    $default  reduce using rule 37 (expression)
+
+
+State 34
+
+   55 RHS: F .
+
+    $default  reduce using rule 55 (RHS)
+
+
+State 35
+
+    6 body: error ';' .
+
+    $default  reduce using rule 6 (body)
+
+
+State 36
+
+   41 declaration_statement: declaratio identifier .
+
+    $default  reduce using rule 41 (declaration_statement)
+
+
+State 37
+
+   61 F: identifier unary .
+
+    $default  reduce using rule 61 (F)
+
+
+State 38
+
+   40 assignment_expression: identifier assignmentop . RHS
+
+    identifier  shift, and go to state 46
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    RHS  go to state 75
+    F    go to state 34
+
+
+State 39
+
+   62 F: unary identifier .
+
+    $default  reduce using rule 62 (F)
+
+
+State 40
+
+   18 while: while_x '(' . identifier comparisionop identifier ')'
+   19      | while_x '(' . identifier comparisionop number ')'
+
+    identifier  shift, and go to state 76
+
+
+State 41
+
+   13 for: for_x '(' . assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' '{' multiple_expressions '}'
+   14    | for_x '(' . assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' expression
+   15    | for_x '(' . assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' logical_expression
+   17    | for_x '(' . assignment_expression_with_null ';' extended_logical_expression_with_null ';' extended_logical_expression_with_null ')' body
+
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 77
+
+    $default  reduce using rule 23 (assignment_expression_with_null)
+
+    assignment_expression_with_null  go to state 78
+    assignment_expression            go to state 79
+    declaration_statement            go to state 80
+
+
+State 42
+
+   16 if: if_x '(' . extended_logical_expression ')' body
+
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    logical_expression           go to state 81
+    extended_logical_expression  go to state 82
+    comparision_expression       go to state 83
+    assignment_expression        go to state 84
+    declaration_statement        go to state 80
+    RHS                          go to state 85
+    F                            go to state 34
+
+
+State 43
+
+   43 printf: printf_x '(' . '"' identifier '"' ')' ';'
+   44       | printf_x '(' . '"' identifier '"' multiple_ids ')' ';'
+
+    '"'  shift, and go to state 86
+
+
+State 44
+
+   11 body: return_x number . ';'
+
+    ';'  shift, and go to state 87
+
+
+State 45
+
+   57 F: '*' identifier .
+
+    $default  reduce using rule 57 (F)
+
+
+State 46
+
+   56 F: identifier .
+   61  | identifier . unary
+
+    unary  shift, and go to state 37
+
+    unary     [reduce using rule 56 (F)]
+    $default  reduce using rule 56 (F)
+
+
+State 47
+
+   49 RHS: '(' RHS . ')'
+   50    | RHS . '+' RHS
+   51    | RHS . '-' RHS
+   52    | RHS . '/' RHS
+   53    | RHS . '*' RHS
+   54    | RHS . '%' RHS
+
+    '+'  shift, and go to state 70
+    '-'  shift, and go to state 71
+    '/'  shift, and go to state 72
+    '*'  shift, and go to state 73
+    '%'  shift, and go to state 74
+    ')'  shift, and go to state 88
+
+
+State 48
+
+   10 body: '{' '}' .
+
+    $default  reduce using rule 10 (body)
+
+
+State 49
+
+   26 multiple_expressions: body .
+
+    $default  reduce using rule 26 (multiple_expressions)
+
+
+State 50
+
+    2 body: '{' multiple_expressions . '}' multiple_expressions
+
+    '}'  shift, and go to state 89
+
+
+State 51
+
+    4 body: logical_expression . multiple_expressions
+   24 multiple_expressions: logical_expression . ';' multiple_expressions
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    ';'         shift, and go to state 90
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $end        reduce using rule 12 (body)
+    error       [reduce using rule 12 (body)]
+    declaratio  [reduce using rule 12 (body)]
+    identifier  [reduce using rule 12 (body)]
+    unary       [reduce using rule 12 (body)]
+    number      [reduce using rule 12 (body)]
+    while_x     [reduce using rule 12 (body)]
+    for_x       [reduce using rule 12 (body)]
+    if_x        [reduce using rule 12 (body)]
+    printf_x    [reduce using rule 12 (body)]
+    return_x    [reduce using rule 12 (body)]
+    '*'         [reduce using rule 12 (body)]
+    '('         [reduce using rule 12 (body)]
+    '{'         [reduce using rule 12 (body)]
+    '}'         reduce using rule 12 (body)
+    '&'         [reduce using rule 12 (body)]
+    '~'         [reduce using rule 12 (body)]
+    '!'         [reduce using rule 12 (body)]
+
+    body                    go to state 49
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    multiple_expressions    go to state 59
+    logical_expression      go to state 51
+    expression              go to state 52
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 52
+
+    3 body: expression . multiple_expressions
+   25 multiple_expressions: expression . ';' multiple_expressions
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    ';'         shift, and go to state 91
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $end        reduce using rule 12 (body)
+    error       [reduce using rule 12 (body)]
+    declaratio  [reduce using rule 12 (body)]
+    identifier  [reduce using rule 12 (body)]
+    unary       [reduce using rule 12 (body)]
+    number      [reduce using rule 12 (body)]
+    while_x     [reduce using rule 12 (body)]
+    for_x       [reduce using rule 12 (body)]
+    if_x        [reduce using rule 12 (body)]
+    printf_x    [reduce using rule 12 (body)]
+    return_x    [reduce using rule 12 (body)]
+    '*'         [reduce using rule 12 (body)]
+    '('         [reduce using rule 12 (body)]
+    '{'         [reduce using rule 12 (body)]
+    '}'         reduce using rule 12 (body)
+    '&'         [reduce using rule 12 (body)]
+    '~'         [reduce using rule 12 (body)]
+    '!'         [reduce using rule 12 (body)]
+
+    body                    go to state 49
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    multiple_expressions    go to state 60
+    logical_expression      go to state 51
+    expression              go to state 52
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 53
+
+   58 F: '&' identifier .
+
+    $default  reduce using rule 58 (F)
+
+
+State 54
+
+   59 F: '~' identifier .
+
+    $default  reduce using rule 59 (F)
+
+
+State 55
+
+   60 F: '!' identifier .
+
+    $default  reduce using rule 60 (F)
+
+
+State 56
+
+    7 body: for multiple_expressions .
+
+    $default  reduce using rule 7 (body)
+
+
+State 57
+
+    5 body: if multiple_expressions .
+
+    $default  reduce using rule 5 (body)
+
+
+State 58
+
+    8 body: while multiple_expressions .
+
+    $default  reduce using rule 8 (body)
+
+
+State 59
+
+    4 body: logical_expression multiple_expressions .
+
+    $default  reduce using rule 4 (body)
+
+
+State 60
+
+    3 body: expression multiple_expressions .
+
+    $default  reduce using rule 3 (body)
+
+
+State 61
+
+   27 logical_expression: comparision_expression logicalop . extended_logical_expression
+
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    logical_expression           go to state 81
+    extended_logical_expression  go to state 92
+    comparision_expression       go to state 83
+    assignment_expression        go to state 84
+    declaration_statement        go to state 80
+    RHS                          go to state 85
+    F                            go to state 34
+
+
+State 62
+
+   34 expression: comparision_expression ';' .
+
+    $default  reduce using rule 34 (expression)
+
+
+State 63
+
+   28 logical_expression: assignment_expression logicalop . extended_logical_expression
+
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    logical_expression           go to state 81
+    extended_logical_expression  go to state 93
+    comparision_expression       go to state 83
+    assignment_expression        go to state 84
+    declaration_statement        go to state 80
+    RHS                          go to state 85
+    F                            go to state 34
+
+
+State 64
+
+   35 expression: assignment_expression ';' .
+
+    $default  reduce using rule 35 (expression)
+
+
+State 65
+
+   39 assignment_expression: declaration_statement assignmentop . RHS
+
+    identifier  shift, and go to state 46
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    RHS  go to state 94
+    F    go to state 34
+
+
+State 66
+
+   36 expression: declaration_statement ';' .
+
+    $default  reduce using rule 36 (expression)
+
+
+State 67
+
+   42 declaration_statement: declaration_statement ',' . pointers identifier
+
+    $default  reduce using rule 48 (pointers)
+
+    pointers  go to state 95
+
+
+State 68
+
+   38 comparision_expression: RHS comparisionop . RHS
+
+    identifier  shift, and go to state 46
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    RHS  go to state 96
+    F    go to state 34
+
+
+State 69
+
+   29 logical_expression: RHS logicalop . extended_logical_expression
+
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    logical_expression           go to state 81
+    extended_logical_expression  go to state 97
+    comparision_expression       go to state 83
+    assignment_expression        go to state 84
+    declaration_statement        go to state 80
+    RHS                          go to state 85
+    F                            go to state 34
+
+
+State 70
+
+   50 RHS: RHS '+' . RHS
+
+    identifier  shift, and go to state 46
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    RHS  go to state 98
+    F    go to state 34
+
+
+State 71
+
+   51 RHS: RHS '-' . RHS
+
+    identifier  shift, and go to state 46
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    RHS  go to state 99
+    F    go to state 34
+
+
+State 72
+
+   52 RHS: RHS '/' . RHS
+
+    identifier  shift, and go to state 46
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    RHS  go to state 100
+    F    go to state 34
+
+
+State 73
+
+   53 RHS: RHS '*' . RHS
+
+    identifier  shift, and go to state 46
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    RHS  go to state 101
+    F    go to state 34
+
+
+State 74
+
+   54 RHS: RHS '%' . RHS
+
+    identifier  shift, and go to state 46
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    RHS  go to state 102
+    F    go to state 34
+
+
+State 75
+
+   40 assignment_expression: identifier assignmentop RHS .
+   50 RHS: RHS . '+' RHS
+   51    | RHS . '-' RHS
+   52    | RHS . '/' RHS
+   53    | RHS . '*' RHS
+   54    | RHS . '%' RHS
+
+    '+'  shift, and go to state 70
+    '-'  shift, and go to state 71
+    '/'  shift, and go to state 72
+    '*'  shift, and go to state 73
+    '%'  shift, and go to state 74
+
+    '*'       [reduce using rule 40 (assignment_expression)]
+    $default  reduce using rule 40 (assignment_expression)
+
+
+State 76
+
+   18 while: while_x '(' identifier . comparisionop identifier ')'
+   19      | while_x '(' identifier . comparisionop number ')'
+
+    comparisionop  shift, and go to state 103
+
+
+State 77
+
+   40 assignment_expression: identifier . assignmentop RHS
+
+    assignmentop  shift, and go to state 38
+
+
+State 78
+
+   17 for: for_x '(' assignment_expression_with_null . ';' extended_logical_expression_with_null ';' extended_logical_expression_with_null ')' body
+
+    ';'  shift, and go to state 104
+
+
+State 79
+
+   13 for: for_x '(' assignment_expression . ';' extended_logical_expression ';' extended_logical_expression ')' '{' multiple_expressions '}'
+   14    | for_x '(' assignment_expression . ';' extended_logical_expression ';' extended_logical_expression ')' expression
+   15    | for_x '(' assignment_expression . ';' extended_logical_expression ';' extended_logical_expression ')' logical_expression
+   22 assignment_expression_with_null: assignment_expression .
+
+    ';'  shift, and go to state 105
+
+    ';'  [reduce using rule 22 (assignment_expression_with_null)]
+
+
+State 80
+
+   39 assignment_expression: declaration_statement . assignmentop RHS
+   42 declaration_statement: declaration_statement . ',' pointers identifier
+
+    assignmentop  shift, and go to state 65
+    ','           shift, and go to state 67
+
+
+State 81
+
+   30 extended_logical_expression: logical_expression .
+
+    $default  reduce using rule 30 (extended_logical_expression)
+
+
+State 82
+
+   16 if: if_x '(' extended_logical_expression . ')' body
+
+    ')'  shift, and go to state 106
+
+
+State 83
+
+   27 logical_expression: comparision_expression . logicalop extended_logical_expression
+   31 extended_logical_expression: comparision_expression .
+
+    logicalop  shift, and go to state 61
+
+    $default  reduce using rule 31 (extended_logical_expression)
+
+
+State 84
+
+   28 logical_expression: assignment_expression . logicalop extended_logical_expression
+   32 extended_logical_expression: assignment_expression .
+
+    logicalop  shift, and go to state 63
+
+    $default  reduce using rule 32 (extended_logical_expression)
+
+
+State 85
+
+   29 logical_expression: RHS . logicalop extended_logical_expression
+   33 extended_logical_expression: RHS .
+   38 comparision_expression: RHS . comparisionop RHS
+   50 RHS: RHS . '+' RHS
+   51    | RHS . '-' RHS
+   52    | RHS . '/' RHS
+   53    | RHS . '*' RHS
+   54    | RHS . '%' RHS
+
+    comparisionop  shift, and go to state 68
+    logicalop      shift, and go to state 69
+    '+'            shift, and go to state 70
+    '-'            shift, and go to state 71
+    '/'            shift, and go to state 72
+    '*'            shift, and go to state 73
+    '%'            shift, and go to state 74
+
+    '*'       [reduce using rule 33 (extended_logical_expression)]
+    $default  reduce using rule 33 (extended_logical_expression)
+
+
+State 86
+
+   43 printf: printf_x '(' '"' . identifier '"' ')' ';'
+   44       | printf_x '(' '"' . identifier '"' multiple_ids ')' ';'
+
+    identifier  shift, and go to state 107
+
+
+State 87
+
+   11 body: return_x number ';' .
+
+    $default  reduce using rule 11 (body)
+
+
+State 88
+
+   49 RHS: '(' RHS ')' .
+
+    $default  reduce using rule 49 (RHS)
+
+
+State 89
+
+    2 body: '{' multiple_expressions '}' . multiple_expressions
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $end        reduce using rule 12 (body)
+    error       [reduce using rule 12 (body)]
+    declaratio  [reduce using rule 12 (body)]
+    identifier  [reduce using rule 12 (body)]
+    unary       [reduce using rule 12 (body)]
+    number      [reduce using rule 12 (body)]
+    while_x     [reduce using rule 12 (body)]
+    for_x       [reduce using rule 12 (body)]
+    if_x        [reduce using rule 12 (body)]
+    printf_x    [reduce using rule 12 (body)]
+    return_x    [reduce using rule 12 (body)]
+    '*'         [reduce using rule 12 (body)]
+    '('         [reduce using rule 12 (body)]
+    '{'         [reduce using rule 12 (body)]
+    '}'         reduce using rule 12 (body)
+    '&'         [reduce using rule 12 (body)]
+    '~'         [reduce using rule 12 (body)]
+    '!'         [reduce using rule 12 (body)]
+
+    body                    go to state 49
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    multiple_expressions    go to state 108
+    logical_expression      go to state 51
+    expression              go to state 52
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 90
+
+   24 multiple_expressions: logical_expression ';' . multiple_expressions
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $end        reduce using rule 12 (body)
+    error       [reduce using rule 12 (body)]
+    declaratio  [reduce using rule 12 (body)]
+    identifier  [reduce using rule 12 (body)]
+    unary       [reduce using rule 12 (body)]
+    number      [reduce using rule 12 (body)]
+    while_x     [reduce using rule 12 (body)]
+    for_x       [reduce using rule 12 (body)]
+    if_x        [reduce using rule 12 (body)]
+    printf_x    [reduce using rule 12 (body)]
+    return_x    [reduce using rule 12 (body)]
+    '*'         [reduce using rule 12 (body)]
+    '('         [reduce using rule 12 (body)]
+    '{'         [reduce using rule 12 (body)]
+    '}'         reduce using rule 12 (body)
+    '&'         [reduce using rule 12 (body)]
+    '~'         [reduce using rule 12 (body)]
+    '!'         [reduce using rule 12 (body)]
+
+    body                    go to state 49
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    multiple_expressions    go to state 109
+    logical_expression      go to state 51
+    expression              go to state 52
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 91
+
+   25 multiple_expressions: expression ';' . multiple_expressions
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $end        reduce using rule 12 (body)
+    error       [reduce using rule 12 (body)]
+    declaratio  [reduce using rule 12 (body)]
+    identifier  [reduce using rule 12 (body)]
+    unary       [reduce using rule 12 (body)]
+    number      [reduce using rule 12 (body)]
+    while_x     [reduce using rule 12 (body)]
+    for_x       [reduce using rule 12 (body)]
+    if_x        [reduce using rule 12 (body)]
+    printf_x    [reduce using rule 12 (body)]
+    return_x    [reduce using rule 12 (body)]
+    '*'         [reduce using rule 12 (body)]
+    '('         [reduce using rule 12 (body)]
+    '{'         [reduce using rule 12 (body)]
+    '}'         reduce using rule 12 (body)
+    '&'         [reduce using rule 12 (body)]
+    '~'         [reduce using rule 12 (body)]
+    '!'         [reduce using rule 12 (body)]
+
+    body                    go to state 49
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    multiple_expressions    go to state 110
+    logical_expression      go to state 51
+    expression              go to state 52
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 92
+
+   27 logical_expression: comparision_expression logicalop extended_logical_expression .
+
+    $default  reduce using rule 27 (logical_expression)
+
+
+State 93
+
+   28 logical_expression: assignment_expression logicalop extended_logical_expression .
+
+    $default  reduce using rule 28 (logical_expression)
+
+
+State 94
+
+   39 assignment_expression: declaration_statement assignmentop RHS .
+   50 RHS: RHS . '+' RHS
+   51    | RHS . '-' RHS
+   52    | RHS . '/' RHS
+   53    | RHS . '*' RHS
+   54    | RHS . '%' RHS
+
+    '+'  shift, and go to state 70
+    '-'  shift, and go to state 71
+    '/'  shift, and go to state 72
+    '*'  shift, and go to state 73
+    '%'  shift, and go to state 74
+
+    '*'       [reduce using rule 39 (assignment_expression)]
+    $default  reduce using rule 39 (assignment_expression)
+
+
+State 95
+
+   42 declaration_statement: declaration_statement ',' pointers . identifier
+   47 pointers: pointers . '*'
+
+    identifier  shift, and go to state 111
+    '*'         shift, and go to state 112
+
+
+State 96
+
+   38 comparision_expression: RHS comparisionop RHS .
+   50 RHS: RHS . '+' RHS
+   51    | RHS . '-' RHS
+   52    | RHS . '/' RHS
+   53    | RHS . '*' RHS
+   54    | RHS . '%' RHS
+
+    '+'  shift, and go to state 70
+    '-'  shift, and go to state 71
+    '/'  shift, and go to state 72
+    '*'  shift, and go to state 73
+    '%'  shift, and go to state 74
+
+    '*'       [reduce using rule 38 (comparision_expression)]
+    $default  reduce using rule 38 (comparision_expression)
+
+
+State 97
+
+   29 logical_expression: RHS logicalop extended_logical_expression .
+
+    $default  reduce using rule 29 (logical_expression)
+
+
+State 98
+
+   50 RHS: RHS . '+' RHS
+   50    | RHS '+' RHS .
+   51    | RHS . '-' RHS
+   52    | RHS . '/' RHS
+   53    | RHS . '*' RHS
+   54    | RHS . '%' RHS
+
+    '/'  shift, and go to state 72
+    '*'  shift, and go to state 73
+    '%'  shift, and go to state 74
+
+    $default  reduce using rule 50 (RHS)
+
+
+State 99
+
+   50 RHS: RHS . '+' RHS
+   51    | RHS . '-' RHS
+   51    | RHS '-' RHS .
+   52    | RHS . '/' RHS
+   53    | RHS . '*' RHS
+   54    | RHS . '%' RHS
+
+    '/'  shift, and go to state 72
+    '*'  shift, and go to state 73
+    '%'  shift, and go to state 74
+
+    $default  reduce using rule 51 (RHS)
+
+
+State 100
+
+   50 RHS: RHS . '+' RHS
+   51    | RHS . '-' RHS
+   52    | RHS . '/' RHS
+   52    | RHS '/' RHS .
+   53    | RHS . '*' RHS
+   54    | RHS . '%' RHS
+
+    '%'  shift, and go to state 74
+
+    $default  reduce using rule 52 (RHS)
+
+
+State 101
+
+   50 RHS: RHS . '+' RHS
+   51    | RHS . '-' RHS
+   52    | RHS . '/' RHS
+   53    | RHS . '*' RHS
+   53    | RHS '*' RHS .
+   54    | RHS . '%' RHS
+
+    '%'  shift, and go to state 74
+
+    $default  reduce using rule 53 (RHS)
+
+
+State 102
+
+   50 RHS: RHS . '+' RHS
+   51    | RHS . '-' RHS
+   52    | RHS . '/' RHS
+   53    | RHS . '*' RHS
+   54    | RHS . '%' RHS
+   54    | RHS '%' RHS .
+
+    $default  reduce using rule 54 (RHS)
+
+
+State 103
+
+   18 while: while_x '(' identifier comparisionop . identifier ')'
+   19      | while_x '(' identifier comparisionop . number ')'
+
+    identifier  shift, and go to state 113
+    number      shift, and go to state 114
+
+
+State 104
+
+   17 for: for_x '(' assignment_expression_with_null ';' . extended_logical_expression_with_null ';' extended_logical_expression_with_null ')' body
+
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $default  reduce using rule 21 (extended_logical_expression_with_null)
+
+    extended_logical_expression_with_null  go to state 115
+    logical_expression                     go to state 81
+    extended_logical_expression            go to state 116
+    comparision_expression                 go to state 83
+    assignment_expression                  go to state 84
+    declaration_statement                  go to state 80
+    RHS                                    go to state 85
+    F                                      go to state 34
+
+
+State 105
+
+   13 for: for_x '(' assignment_expression ';' . extended_logical_expression ';' extended_logical_expression ')' '{' multiple_expressions '}'
+   14    | for_x '(' assignment_expression ';' . extended_logical_expression ';' extended_logical_expression ')' expression
+   15    | for_x '(' assignment_expression ';' . extended_logical_expression ';' extended_logical_expression ')' logical_expression
+
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    logical_expression           go to state 81
+    extended_logical_expression  go to state 117
+    comparision_expression       go to state 83
+    assignment_expression        go to state 84
+    declaration_statement        go to state 80
+    RHS                          go to state 85
+    F                            go to state 34
+
+
+State 106
+
+   16 if: if_x '(' extended_logical_expression ')' . body
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $end        reduce using rule 12 (body)
+    error       [reduce using rule 12 (body)]
+    declaratio  [reduce using rule 12 (body)]
+    identifier  [reduce using rule 12 (body)]
+    unary       [reduce using rule 12 (body)]
+    number      [reduce using rule 12 (body)]
+    while_x     [reduce using rule 12 (body)]
+    for_x       [reduce using rule 12 (body)]
+    if_x        [reduce using rule 12 (body)]
+    printf_x    [reduce using rule 12 (body)]
+    return_x    [reduce using rule 12 (body)]
+    '*'         [reduce using rule 12 (body)]
+    '('         [reduce using rule 12 (body)]
+    '{'         [reduce using rule 12 (body)]
+    '}'         reduce using rule 12 (body)
+    '&'         [reduce using rule 12 (body)]
+    '~'         [reduce using rule 12 (body)]
+    '!'         [reduce using rule 12 (body)]
+
+    body                    go to state 118
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    logical_expression      go to state 27
+    expression              go to state 28
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 107
+
+   43 printf: printf_x '(' '"' identifier . '"' ')' ';'
+   44       | printf_x '(' '"' identifier . '"' multiple_ids ')' ';'
+
+    '"'  shift, and go to state 119
+
+
+State 108
+
+    2 body: '{' multiple_expressions '}' multiple_expressions .
+
+    $default  reduce using rule 2 (body)
+
+
+State 109
+
+   24 multiple_expressions: logical_expression ';' multiple_expressions .
+
+    $default  reduce using rule 24 (multiple_expressions)
+
+
+State 110
+
+   25 multiple_expressions: expression ';' multiple_expressions .
+
+    $default  reduce using rule 25 (multiple_expressions)
+
+
+State 111
+
+   42 declaration_statement: declaration_statement ',' pointers identifier .
+
+    $default  reduce using rule 42 (declaration_statement)
+
+
+State 112
+
+   47 pointers: pointers '*' .
+
+    $default  reduce using rule 47 (pointers)
+
+
+State 113
+
+   18 while: while_x '(' identifier comparisionop identifier . ')'
+
+    ')'  shift, and go to state 120
+
+
+State 114
+
+   19 while: while_x '(' identifier comparisionop number . ')'
+
+    ')'  shift, and go to state 121
+
+
+State 115
+
+   17 for: for_x '(' assignment_expression_with_null ';' extended_logical_expression_with_null . ';' extended_logical_expression_with_null ')' body
+
+    ';'  shift, and go to state 122
+
+
+State 116
+
+   20 extended_logical_expression_with_null: extended_logical_expression .
+
+    $default  reduce using rule 20 (extended_logical_expression_with_null)
+
+
+State 117
+
+   13 for: for_x '(' assignment_expression ';' extended_logical_expression . ';' extended_logical_expression ')' '{' multiple_expressions '}'
+   14    | for_x '(' assignment_expression ';' extended_logical_expression . ';' extended_logical_expression ')' expression
+   15    | for_x '(' assignment_expression ';' extended_logical_expression . ';' extended_logical_expression ')' logical_expression
+
+    ';'  shift, and go to state 123
+
+
+State 118
+
+   16 if: if_x '(' extended_logical_expression ')' body .
+
+    $default  reduce using rule 16 (if)
+
+
+State 119
+
+   43 printf: printf_x '(' '"' identifier '"' . ')' ';'
+   44       | printf_x '(' '"' identifier '"' . multiple_ids ')' ';'
+
+    ')'  shift, and go to state 124
+    ','  shift, and go to state 125
+
+    multiple_ids  go to state 126
+
+
+State 120
+
+   18 while: while_x '(' identifier comparisionop identifier ')' .
+
+    $default  reduce using rule 18 (while)
+
+
+State 121
+
+   19 while: while_x '(' identifier comparisionop number ')' .
+
+    $default  reduce using rule 19 (while)
+
+
+State 122
+
+   17 for: for_x '(' assignment_expression_with_null ';' extended_logical_expression_with_null ';' . extended_logical_expression_with_null ')' body
+
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $default  reduce using rule 21 (extended_logical_expression_with_null)
+
+    extended_logical_expression_with_null  go to state 127
+    logical_expression                     go to state 81
+    extended_logical_expression            go to state 116
+    comparision_expression                 go to state 83
+    assignment_expression                  go to state 84
+    declaration_statement                  go to state 80
+    RHS                                    go to state 85
+    F                                      go to state 34
+
+
+State 123
+
+   13 for: for_x '(' assignment_expression ';' extended_logical_expression ';' . extended_logical_expression ')' '{' multiple_expressions '}'
+   14    | for_x '(' assignment_expression ';' extended_logical_expression ';' . extended_logical_expression ')' expression
+   15    | for_x '(' assignment_expression ';' extended_logical_expression ';' . extended_logical_expression ')' logical_expression
+
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    logical_expression           go to state 81
+    extended_logical_expression  go to state 128
+    comparision_expression       go to state 83
+    assignment_expression        go to state 84
+    declaration_statement        go to state 80
+    RHS                          go to state 85
+    F                            go to state 34
+
+
+State 124
+
+   43 printf: printf_x '(' '"' identifier '"' ')' . ';'
+
+    ';'  shift, and go to state 129
+
+
+State 125
+
+   45 multiple_ids: ',' . identifier multiple_ids
+   46             | ',' . identifier
+
+    identifier  shift, and go to state 130
+
+
+State 126
+
+   44 printf: printf_x '(' '"' identifier '"' multiple_ids . ')' ';'
+
+    ')'  shift, and go to state 131
+
+
+State 127
+
+   17 for: for_x '(' assignment_expression_with_null ';' extended_logical_expression_with_null ';' extended_logical_expression_with_null . ')' body
+
+    ')'  shift, and go to state 132
+
+
+State 128
+
+   13 for: for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression . ')' '{' multiple_expressions '}'
+   14    | for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression . ')' expression
+   15    | for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression . ')' logical_expression
+
+    ')'  shift, and go to state 133
+
+
+State 129
+
+   43 printf: printf_x '(' '"' identifier '"' ')' ';' .
+
+    $default  reduce using rule 43 (printf)
+
+
+State 130
+
+   45 multiple_ids: ',' identifier . multiple_ids
+   46             | ',' identifier .
+
+    ','  shift, and go to state 125
+
+    $default  reduce using rule 46 (multiple_ids)
+
+    multiple_ids  go to state 134
+
+
+State 131
+
+   44 printf: printf_x '(' '"' identifier '"' multiple_ids ')' . ';'
+
+    ';'  shift, and go to state 135
+
+
+State 132
+
+   17 for: for_x '(' assignment_expression_with_null ';' extended_logical_expression_with_null ';' extended_logical_expression_with_null ')' . body
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    $end        reduce using rule 12 (body)
+    error       [reduce using rule 12 (body)]
+    declaratio  [reduce using rule 12 (body)]
+    identifier  [reduce using rule 12 (body)]
+    unary       [reduce using rule 12 (body)]
+    number      [reduce using rule 12 (body)]
+    while_x     [reduce using rule 12 (body)]
+    for_x       [reduce using rule 12 (body)]
+    if_x        [reduce using rule 12 (body)]
+    printf_x    [reduce using rule 12 (body)]
+    return_x    [reduce using rule 12 (body)]
+    '*'         [reduce using rule 12 (body)]
+    '('         [reduce using rule 12 (body)]
+    '{'         [reduce using rule 12 (body)]
+    '}'         reduce using rule 12 (body)
+    '&'         [reduce using rule 12 (body)]
+    '~'         [reduce using rule 12 (body)]
+    '!'         [reduce using rule 12 (body)]
+
+    body                    go to state 136
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    logical_expression      go to state 27
+    expression              go to state 28
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 133
+
+   13 for: for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' . '{' multiple_expressions '}'
+   14    | for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' . expression
+   15    | for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' . logical_expression
+
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 137
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    logical_expression      go to state 138
+    expression              go to state 139
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 134
+
+   45 multiple_ids: ',' identifier multiple_ids .
+
+    $default  reduce using rule 45 (multiple_ids)
+
+
+State 135
+
+   44 printf: printf_x '(' '"' identifier '"' multiple_ids ')' ';' .
+
+    $default  reduce using rule 44 (printf)
+
+
+State 136
+
+   17 for: for_x '(' assignment_expression_with_null ';' extended_logical_expression_with_null ';' extended_logical_expression_with_null ')' body .
+
+    $default  reduce using rule 17 (for)
+
+
+State 137
+
+   13 for: for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' '{' . multiple_expressions '}'
+
+    error       shift, and go to state 7
+    declaratio  shift, and go to state 8
+    identifier  shift, and go to state 9
+    unary       shift, and go to state 10
+    number      shift, and go to state 11
+    while_x     shift, and go to state 12
+    for_x       shift, and go to state 13
+    if_x        shift, and go to state 14
+    printf_x    shift, and go to state 15
+    return_x    shift, and go to state 16
+    '*'         shift, and go to state 17
+    '('         shift, and go to state 18
+    '{'         shift, and go to state 19
+    '&'         shift, and go to state 20
+    '~'         shift, and go to state 21
+    '!'         shift, and go to state 22
+
+    '}'  reduce using rule 12 (body)
+
+    body                    go to state 49
+    for                     go to state 24
+    if                      go to state 25
+    while                   go to state 26
+    multiple_expressions    go to state 140
+    logical_expression      go to state 51
+    expression              go to state 52
+    comparision_expression  go to state 29
+    assignment_expression   go to state 30
+    declaration_statement   go to state 31
+    printf                  go to state 32
+    RHS                     go to state 33
+    F                       go to state 34
+
+
+State 138
+
+   15 for: for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' logical_expression .
+
+    $default  reduce using rule 15 (for)
+
+
+State 139
+
+   14 for: for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' expression .
+
+    $default  reduce using rule 14 (for)
+
+
+State 140
+
+   13 for: for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' '{' multiple_expressions . '}'
+
+    '}'  shift, and go to state 141
+
+
+State 141
+
+   13 for: for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' '{' multiple_expressions '}' .
+
+    $default  reduce using rule 13 (for)

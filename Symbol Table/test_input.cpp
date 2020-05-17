@@ -7,11 +7,11 @@ int main()
 	line
 */
 	int b;
-	int 0a = 10;
+	int a = 10;
 	int c;
 	int b;
 	a=b+10;
-	a--- ;
+	a-- ;
 	b;
 	
 }

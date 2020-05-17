@@ -27,6 +27,7 @@ struct scope symtab[100];
 %}
 
 %%
+[\n] {;}
 ^"#include".+ ;
 main					    {printf("main\n");      return main_x;}
 if 					    {printf("if\n");        return if_x;}
@@ -38,16 +39,18 @@ printf						{printf("printf\n");	return printf_x;}
 ([+][=])|([-][=])|([*][=])|([/][=])|([%][=]) {in=0;printf("assignop:%s\n",yytext); return assignmentop;}
 ([=]) { flag_value=1;in=0;printf("assignop:%s\n",yytext); return assignmentop;}
 ([=][=])|([>])|([<])|([!][=])|([>][=])|[<]([=]) {in=0;printf("compop:%s\n",yytext); return comparisionop;}
-((int)|(float)|(double)|(char))[* ]*  {if(set==1){sc_set=1;o_scope++;}in=1;printf("decl:%s\n",yytext); strcpy(decl,yytext); return declaratio;}
+int|float|double|char  {if(set==1){sc_set=1;o_scope++;}in=1;printf("decl:%s\n",yytext); strcpy(decl,yytext); return declaratio;}
 [0-9][0-9]*		{if(flag_value){symtab[up-1].value =atoi(yytext); flag_value =0;};set=0;in=0;printf("num:%s\n",yytext); return number;}
 ([+][+])|([-][-]) {set=0;in=0;printf("unary:%s\n",yytext);return unary;}
 [A-Za-z_]([A-Za-z0-9_])* {if(in==1){set=0;insertIntoSym(yytext,yylineno,st[top]);}in=0;printf("id:%s\n",yytext); return identifier;}
 \n*	    ;
 [\t ]*	;
-\{		{if(sc_set){o_scope--;sc_set=0;}o_scope++;return yytext[0];}
-\}		{o_scope--; return yytext[0];}
+"{"		{if(sc_set){o_scope--;sc_set=0;}o_scope++;return yytext[0];}
+"}"		{o_scope--; return yytext[0];}
+";"		{return yytext[0];}
 (\/\/.*)|"/*"([^*]|(\*+[^*/]))*\*+\/[\n]* ;
 .	{return yytext[0];}
+
 
 %%
 

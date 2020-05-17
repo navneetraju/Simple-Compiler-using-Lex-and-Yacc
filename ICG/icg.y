@@ -804,7 +804,7 @@ equality_expression
 			buffer[m] = '\0';
 			fprintf(fp_icg, "%s = %s != %s\n",buffer, $1, $3);
 			fprintf(fp_quad, "\t!=\t\t%s\t\t%s\t\t%s\n", $1, $3, buffer);
-
+	
 			strncpy($$, buffer, m+1);		//check out
 		}
 	;
@@ -995,10 +995,21 @@ void yyerror(const char *str){
 }
 
 
-int main(){
+int main(int argc, char *argv[]){
+	int printflag=0;
+	if(argc>1)
+	{
+		if(!strcmp(argv[1],"--print"))
+			printflag=1;
+		else
+			{
+				printf("Invalid Option!\n");
+				return 0;
+			}
+	}
 	
-	fp_icg 	 	= fopen("IntermediateCode/icg.txt", "w");
-	fp_quad		= fopen("IntermediateCode/quad.txt", "w");
+	fp_icg 	 	= fopen("icg.txt", "w");
+	fp_quad		= fopen("quad.txt", "w");
 	printf("\n");
 	
 
@@ -1009,15 +1020,26 @@ int main(){
 	
 	fclose(fp_icg);
 	
-	printf("\n\nIntermediate Code\n\n");
-	system("cat IntermediateCode/icg.txt");
+	
+	if(printflag)
+	{
+		printf("\n\nIntermediate Code\n\n");
+		system("cat icg.txt");
+	}
+		
 
-	printf("\n\nQuadruple Format\n\n");
+	
 	
 	
 
 	fclose(fp_quad);
-	system("cat IntermediateCode/quad.txt");
+	if(printflag)
+	{
+		printf("\n\nQuadruple Format\n\n");
+		system("cat quad.txt");
+	}
+		
+	
 	
 	return 0;
 }

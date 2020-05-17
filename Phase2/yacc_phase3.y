@@ -12,35 +12,34 @@ extern void display();
 
 %start main_block 
 %error-verbose
-%token declaratio identifier unary operator number assignmentop comparisionop logicalop while_x for_x if_x main_x printf_x return_x new_line
+%token declaratio identifier unary operator number assignmentop comparisionop logicalop while_x for_x if_x main_x printf_x return_x new_line 
 %left '+' '-'
 %left '/' '*'
 %left '%'
 
 %%
 
-main_block : declaratio main_x '(' ')'  multiple_expressions
+main_block : declaratio main_x '(' ')' body
 	;
 	
-body : '{' multiple_expressions '}' body
-	 | '{' multiple_expressions '}' 
-	 | expression 
-     | logical_expression 
-     | if
+body : '{' multiple_expressions '}' multiple_expressions
+	 | expression multiple_expressions
+     | logical_expression multiple_expressions
+     | if multiple_expressions
      | error ';'
-     | for 
-     | while
+     | for multiple_expressions
+     | while multiple_expressions
      | printf
      | '{' '}' 
-     | return_x '0' ';'
+     | return_x number ';' | 
      ;
 
-/*
+
 for:    for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' '{' multiple_expressions '}'
       | for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' expression
       | for_x '(' assignment_expression ';' extended_logical_expression ';' extended_logical_expression ')' logical_expression
       ;
-*/
+
 
 if: if_x '(' extended_logical_expression ')' body
     ;
@@ -48,8 +47,8 @@ if: if_x '(' extended_logical_expression ')' body
 for : for_x '(' assignment_expression_with_null ';' extended_logical_expression_with_null ';' extended_logical_expression_with_null ')' body
 	;
       
-while :  while_x '(' logical_expression ')' body
-       | while_x '(' expression ')' body       
+while :  while_x '(' identifier comparisionop identifier ')' 
+       |  while_x '(' identifier comparisionop number ')' 
        ;
 
 extended_logical_expression_with_null:extended_logical_expression
@@ -131,7 +130,7 @@ int yyerror(const char *s)
 {
   	extern int yylineno;
   	valid =0;
-  	printf("Line no: %d \n The error is: %s\n",yylineno-1,s);
+  	printf("Line no: %d \n The error is: %s\n",yylineno,s);
 
 
 }

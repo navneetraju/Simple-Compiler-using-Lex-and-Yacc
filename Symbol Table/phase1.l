@@ -14,6 +14,8 @@
 #define TYPE_OPBRACK 10
 #define TYPE_CLOSEBRACK 11
 #define INIT 9999999
+
+
 FILE *fd2;
 int line_number = 0;
 int sym_table_length = 0;
