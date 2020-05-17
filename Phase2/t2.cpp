@@ -15,4 +15,13 @@ int main(){
 	{
 		count--;
 	}
+	if(count==0)
+	{
+		count=count+2;
+	}
+	else
+	{
+		count=0;
+	}
+	
 }

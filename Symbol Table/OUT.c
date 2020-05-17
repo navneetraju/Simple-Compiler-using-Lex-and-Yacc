@@ -9,7 +9,22 @@ int main()
 	int b;
 	a=b+10;
 	a-- ;
-	b;
+	int i;
+	for(i=0;i<100;i++)
+	{
+		a=i;
+	}
+	while(i>0)
+	{
+		a=a-i;
+	}
+	if(i==0)
+	{
+		b=a;
+	}
+	else
+	{
+		a=b;
+	}
 	
 }
-
