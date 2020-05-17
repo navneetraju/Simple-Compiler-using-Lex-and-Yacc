@@ -1,4 +1,5 @@
 int main(){
+	//single line comment
 	int nume=3;	
 	int a=10;
 	int i=0;
@@ -6,6 +7,9 @@ int main(){
 	{
 		a=a+i;		
 	}
+	/*
+		multi line
+	*/
 	int count=10;
 	while(count>0)
 	{
