@@ -1,33 +1,34 @@
 import time
+import sys
 def findoperation(stmt, op, label):
     if(op == ">"):
         cmp = "BGT "+label
-        print("ARM STATEMENT: ", cmp)
+        print(  cmp)
         time.sleep(0.02)
         stmt.append(cmp)
     elif(op == "<"):
         cmp = "BLT "+label
-        print("ARM STATEMENT: ", cmp)
+        print(  cmp)
         time.sleep(0.02)
         stmt.append(cmp)
     elif(op == ">="):
         cmp = "BGE "+label
-        print("ARM STATEMENT: ", cmp)
+        print(  cmp)
         time.sleep(0.02)
         stmt.append(cmp)
     elif(op == "<="):
         cmp = "BLE "+label
-        print("ARM STATEMENT: ", cmp)
+        print(  cmp)
         time.sleep(0.02)
         stmt.append(cmp)
     elif(op == "=="):
         cmp = "BEQ "+label
-        print("ARM STATEMENT: ", cmp)
+        print(  cmp)
         time.sleep(0.02)
         stmt.append(cmp)
     elif(op == "!="):
         cmp = "BNE "+label
-        print("ARM STATEMENT: ", cmp)
+        print(  cmp)
         time.sleep(0.02)
         stmt.append(cmp)
     return stmt
@@ -35,7 +36,7 @@ def findoperation(stmt, op, label):
 def loadconstant(stmt, regval, value):
     lstmt = "MOV "+"R"+str(regval)+"," + "#" + value
     stmt.append(lstmt)
-    print("ARM STATEMENT: ", lstmt)
+    print(  lstmt)
     time.sleep(0.02)
     r1 = regval
     regval = (regval + 1)%13
@@ -47,13 +48,13 @@ def loadvariable(stmt, regval, value):
     r1 = regval
     regval = (regval + 1)%13
                 
-    print("ARM STATEMENT: ", st1)
+    print(  st1)
     time.sleep(0.02)
     stmt.append(st1)
     
     st2 = "MOV "+"R" + str(regval) +","+ "[R" + str(r1) + "]"
     stmt.append(st2)
-    print("ARM STATEMENT: ", st2)
+    print(  st2)
     time.sleep(0.02)
     r2 = regval
     regval = (regval + 1)%13
@@ -61,25 +62,25 @@ def loadvariable(stmt, regval, value):
 def binaryoperation(stmt, lhs, arg1, op, arg2):
     if(op == "+"):
         st = "ADD "+"R"+str(lhs)+","+"R"+str(arg1)+",R"+str(arg2)
-        print("ARM STATEMENT: ", st)
+        print(  st)
         time.sleep(0.02)
         stmt.append(st)
         
     elif(op == "-"):
         st = "SUBS "+"R"+str(lhs)+","+"R"+str(arg1)+",R"+str(arg2)
-        print("ARM STATEMENT: ", st)
+        print(  st)
         time.sleep(0.02)
         stmt.append(st)        
         
     elif(op == "*"):
         st = "MUL "+"R"+str(lhs)+","+"R"+str(arg1)+",R"+str(arg2)
-        print("ARM STATEMENT: ", st)
+        print(  st)
         time.sleep(0.02)
         stmt.append(st)        
         
     elif(op == "/"):
         st = "SDIV "+"R"+str(lhs)+","+"R"+str(arg1)+",R"+str(arg2)
-        print("ARM STATEMENT: ", st)
+        print(  st)
         time.sleep(0.02)
         stmt.append(st)   
     return stmt
@@ -95,12 +96,12 @@ def genAssembly(lines, file):
         if(len(i.split()) == 2):
             if(i.split()[0] == "GOTO"):
                 st = "B " + i.split()[1]
-                print("ARM STATEMENT: ", st)
+                print(  st)
                 time.sleep(0.02)
                 stmt.append(st)
             else:
                 st = i
-                print("ARM STATEMENT: ", st)
+                print(  st)
                 time.sleep(0.02)
                 stmt.append(st)
         if(len(i.split()) == 5):
@@ -112,7 +113,7 @@ def genAssembly(lines, file):
                 stmt, regval, r3, r4 = loadvariable(stmt, regval, lhs)
                 stmt = binaryoperation(stmt, r4, r1, op, r2)
                 st = "STR R"+str(r4) + ", [R" + str(r3) + "]"
-                print("ARM STATEMENT: ", st)
+                print(  st)
                 time.sleep(0.02)
                 stmt.append(st)
                 
@@ -122,7 +123,7 @@ def genAssembly(lines, file):
                 stmt, regval, r4, r5 = loadvariable(stmt, regval, lhs)
                 stmt = binaryoperation(stmt, r5, r1, op, r3)
                 st = "STR R"+str(r5) + ", [R" + str(r4) + "]"
-                print("ARM STATEMENT: ", st)
+                print(  st)
                 time.sleep(0.02)
                 stmt.append(st)
                 #STR Op
@@ -132,7 +133,7 @@ def genAssembly(lines, file):
                 stmt, regval, r4, r5 = loadvariable(stmt, regval, lhs)
                 stmt = binaryoperation(stmt, r5, r2, op, r3)
                 st = "STR R"+str(r5) + ", [R" + str(r4) + "]"
-                print("ARM STATEMENT: ", st)
+                print(  st)
                 time.sleep(0.02)
                 stmt.append(st)                
             else:
@@ -141,7 +142,7 @@ def genAssembly(lines, file):
                 stmt, regval, r5,r6 = loadvariable(stmt, regval, lhs)
                 stmt = binaryoperation(stmt, r6, r2, op, r4)
                 st = "STR R"+str(r6) + ", [R" + str(r5) + "]"
-                print("ARM STATEMENT: ", st)
+                print(  st)
                 time.sleep(0.02)
                 stmt.append(st)
         if(len(i.split())==4 and i.split()[0]=="ARR"):
@@ -154,7 +155,7 @@ def genAssembly(lines, file):
                 for x in value:
                     vals = vals + x + " "
                 out = out + vals
-                print("ARM DECLARATION :", out)
+                print( out)
                 time.sleep(0.02)
                 vardec.append(out)
                 varlist.append(variable)
@@ -185,7 +186,7 @@ def genAssembly(lines, file):
                 stmt, regval, r1 = loadconstant(stmt, regval, lhs)
                 stmt, regval, r2 = loadconstant(stmt, regval, rhs)
                 cmp = "CMP R"+str(r1)+", "+"R"+str(r2)
-                print("ARM STATEMENT: ", cmp)
+                print(  cmp)
                 time.sleep(0.02)
                 stmt.append(cmp)
                 stmt = findoperation(stmt, op, label)
@@ -195,7 +196,7 @@ def genAssembly(lines, file):
                 stmt, regval, r2, r3 = loadvariable(stmt, regval, rhs)
                 
                 st4 = "CMP " + "R"+str(r1) + "," + "R" + str(r3)
-                print("ARM STATEMENT: ", st4)
+                print(  st4)
                 time.sleep(0.02)
                 stmt.append(st4)
                 stmt = findoperation(stmt, op, label)
@@ -203,7 +204,7 @@ def genAssembly(lines, file):
                 stmt, regval, r1, r2 = loadvariable(stmt, regval, lhs)
                 stmt, regval, r3 = loadconstant(stmt, regval, rhs)
                 st4 = "CMP " + "R"+str(r2) + "," + "R" + str(r3)
-                print("ARM STATEMENT: ", st4)
+                print(  st4)
                 time.sleep(0.02)
                 stmt.append(st4)
                 stmt = findoperation(stmt, op, label)
@@ -212,7 +213,7 @@ def genAssembly(lines, file):
                 stmt, regval, r3, r4 = loadvariable(stmt, regval, rhs)
                 
                 st4 = "CMP " + "R"+str(r2) + "," + "R" + str(r4)
-                print("ARM STATEMENT: ", st4)
+                print(  st4)
                 time.sleep(0.02)
                 stmt.append(st4)
                 stmt = findoperation(stmt, op, label)
@@ -226,7 +227,7 @@ def genAssembly(lines, file):
             if variable not in varlist:
                 out = ""
                 out = out + variable + ":" + " .WORD " + str(value)
-                print("ARM DECLARATION :", out)
+                print(out)
                 time.sleep(0.02)
                 vardec.append(out)
                 varlist.append(variable)
@@ -234,7 +235,7 @@ def genAssembly(lines, file):
                 stmt, regval, r1, r2 = loadvariable(stmt, regval, variable)
                 stmt, regval, r3 = loadconstant(stmt, regval, value)
                 st = "STR R"+str(r3)+", [R" + str(r1) + "]"
-                print("ARM STATEMENT: ", st)
+                print(  st)
                 time.sleep(0.02)
                 stmt.append(st)
     return vardec, stmt
@@ -254,20 +255,11 @@ def writeassembly(stmt, vardec, File):
     
     print("Written to File")
 
-fin = open("icg.txt", "r")
+fin = open(sys.argv[1], "r")
 fout = open("icg.s", "w")
 
 lines = fin.readlines()
-print("Generating Assembly ... ")
 vardec, stmt = genAssembly(lines, fout)
-print("Assembly Code Generated")
-print("Writing to File")
-print("---------------")
 writeassembly(stmt, vardec, fout)
-print("---------------")
-print("Compilation Succesful")
-fin.close()
-fout.close()
-
 fin.close()
 fout.close()

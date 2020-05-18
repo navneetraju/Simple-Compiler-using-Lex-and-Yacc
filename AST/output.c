@@ -1,10 +1,9 @@
 int main(){
-	int i=0;
-	while(i<5)
-	{
-		i++;
-	}
-	int a;
-	if(i>5)
+	
+	int i, a, b;
+	int nume=3.45;	
+	for(i = 0;  i < 10; i++){
 		a=i;
+	}
+	i=1;
 }
