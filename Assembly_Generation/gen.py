@@ -1,13 +1,13 @@
 import time
 import sys
-def loadconstant(stmt, regval, value):
+def constant_reg(stmt, regval, value):
     lstmt = "MOV "+"R"+str(regval)+"," + "#" + value
     stmt.append(lstmt)
     r1 = regval
     regval = (regval + 1)%13
     return stmt, regval, r1
 
-def loadvariable(stmt, regval, value):
+def variable_reg(stmt, regval, value):
     st1 = "MOV "+"R" + str(regval) + ","+"="+str(value)
     r1 = regval
     regval = (regval + 1)%13
@@ -18,7 +18,7 @@ def loadvariable(stmt, regval, value):
     regval = (regval + 1)%13
     return stmt, regval, r1, r2
 
-def binaryoperation(stmt, lhs, arg1, op, arg2):
+def arith_op(stmt, lhs, arg1, op, arg2):
     if(op == "+"):
         st = "ADD "+"R"+str(lhs)+","+"R"+str(arg1)+",R"+str(arg2)
         stmt.append(st)
@@ -36,7 +36,7 @@ def binaryoperation(stmt, lhs, arg1, op, arg2):
         stmt.append(st)   
     return stmt
     
-def genAssembly(lines, file):
+def icg_to_asm(lines, file):
     vardec = []
     stmt = []
     varlist = []
@@ -60,58 +60,58 @@ def genAssembly(lines, file):
             if(op=="<" or op==">" or op=="<=" or op==">=" or op=="==" or op=="!="):
                 continue
             if(arg1.isdigit() and arg2.isdigit()):
-                stmt, regval, r1 = loadconstant(stmt, regval, arg1)
-                stmt, regval, r2 = loadconstant(stmt, regval, arg2)
-                stmt, regval, r3, r4 = loadvariable(stmt, regval, lhs)
-                stmt = binaryoperation(stmt, r4, r1, op, r2)
+                stmt, regval, r1 = constant_reg(stmt, regval, arg1)
+                stmt, regval, r2 = constant_reg(stmt, regval, arg2)
+                stmt, regval, r3, r4 = variable_reg(stmt, regval, lhs)
+                stmt = arith_op(stmt, r4, r1, op, r2)
                 st = "STR R"+str(r4) + ", [R" + str(r3) + "]"
                 stmt.append(st)
             elif(arg1.isdigit()):
-                stmt, regval, r1 = loadconstant(stmt, regval, arg1)
-                stmt, regval, r2, r3 = loadvariable(stmt, regval, arg2)
-                stmt, regval, r4, r5 = loadvariable(stmt, regval, lhs)
-                stmt = binaryoperation(stmt, r5, r1, op, r3)
+                stmt, regval, r1 = constant_reg(stmt, regval, arg1)
+                stmt, regval, r2, r3 = variable_reg(stmt, regval, arg2)
+                stmt, regval, r4, r5 = variable_reg(stmt, regval, lhs)
+                stmt = arith_op(stmt, r5, r1, op, r3)
                 st = "STR R"+str(r5) + ", [R" + str(r4) + "]"
                 stmt.append(st)
             elif(arg2.isdigit()):
-                stmt, regval, r1,r2 = loadvariable(stmt, regval, arg1)
-                stmt, regval, r3 = loadconstant(stmt, regval, arg2)
-                stmt, regval, r4, r5 = loadvariable(stmt, regval, lhs)
-                stmt = binaryoperation(stmt, r5, r2, op, r3)
+                stmt, regval, r1,r2 = variable_reg(stmt, regval, arg1)
+                stmt, regval, r3 = constant_reg(stmt, regval, arg2)
+                stmt, regval, r4, r5 = variable_reg(stmt, regval, lhs)
+                stmt = arith_op(stmt, r5, r2, op, r3)
                 st = "STR R"+str(r5) + ", [R" + str(r4) + "]"
                 stmt.append(st)                
             else:
-                stmt, regval, r1,r2 = loadvariable(stmt, regval, arg1)
-                stmt, regval, r3,r4 = loadvariable(stmt, regval, arg2)
-                stmt, regval, r5,r6 = loadvariable(stmt, regval, lhs)
-                stmt = binaryoperation(stmt, r6, r2, op, r4)
+                stmt, regval, r1,r2 = variable_reg(stmt, regval, arg1)
+                stmt, regval, r3,r4 = variable_reg(stmt, regval, arg2)
+                stmt, regval, r5,r6 = variable_reg(stmt, regval, lhs)
+                stmt = arith_op(stmt, r6, r2, op, r4)
                 st = "STR R"+str(r6) + ", [R" + str(r5) + "]"
                 stmt.append(st)
         elif(len(i.split()) == 4):
             prev_line=lines[index-2].split()
             conditions={">":"LE","<":"GE",">=":"L","<=":"G","==":"NE","!=":"E"}
             if(prev_line[2].isdigit() and prev_line[4].isdigit()):
-                stmt, regval, r=loadconstant(stmt, regval, prev_line[2])
+                stmt, regval, r=constant_reg(stmt, regval, prev_line[2])
                 cmp_stmt="CMP "+"R"+str(r)+",#"+prev_line[4]
                 stmt.append(cmp_stmt)
                 b_stmt="B"+conditions[prev_line[3]]+" "+lines[index-1].split()[3]
                 stmt.append(b_stmt)
             elif(prev_line[2].isdigit() or prev_line[4].isdigit()):
                 if(prev_line[2].isdigit()):
-                    stmt, regval, r1,r2 = loadvariable(stmt, regval, prev_line[4])
+                    stmt, regval, r1,r2 = variable_reg(stmt, regval, prev_line[4])
                     cmp_stmt="CMP "+"R"+str(r2)+",#"+prev_line[2]
                     stmt.append(cmp_stmt)
                     b_stmt="B"+conditions[prev_line[3]]+" "+lines[index-1].split()[3]
                     stmt.append(b_stmt)
                 else:
-                    stmt, regval, r1,r2 = loadvariable(stmt, regval, prev_line[2])
+                    stmt, regval, r1,r2 = variable_reg(stmt, regval, prev_line[2])
                     cmp_stmt="CMP "+"R"+str(r2)+",#"+prev_line[4]
                     stmt.append(cmp_stmt)
                     b_stmt="B"+conditions[prev_line[3]]+" "+lines[index-1].split()[3]
                     stmt.append(b_stmt)
             else:
-                stmt, regval, r1,r2 = loadvariable(stmt, regval, prev_line[2])
-                stmt, regval, r3,r4 = loadvariable(stmt, regval, prev_line[4])
+                stmt, regval, r1,r2 = variable_reg(stmt, regval, prev_line[2])
+                stmt, regval, r3,r4 = variable_reg(stmt, regval, prev_line[4])
                 cmp_stmt="CMP "+"R"+str(r2)+",R"+str(r4)
                 stmt.append(cmp_stmt)
                 b_stmt="B"+conditions[prev_line[3]]+" "+lines[index-1].split()[3]
@@ -126,17 +126,16 @@ def genAssembly(lines, file):
                 vardec.append(out)
                 varlist.append(variable)
             else:
-                stmt, regval, r1, r2 = loadvariable(stmt, regval, variable)
-                stmt, regval, r3 = loadconstant(stmt, regval, value)
+                stmt, regval, r1, r2 = variable_reg(stmt, regval, variable)
+                stmt, regval, r3 = constant_reg(stmt, regval, value)
                 st = "STR R"+str(r3)+", [R" + str(r1) + "]"
                 stmt.append(st)
     return vardec, stmt
                            
             
-def writeassembly(stmt, vardec, File):
+def file_write(stmt, vardec, File):
     File.write(".text\n")
     for i in stmt:
-        time.sleep(0.001)
         File.write("%s\n"%(i))
     File.write("SWI 0x011\n")
     File.write(".DATA\n")
@@ -152,8 +151,8 @@ if __name__=="__main__":
     fout = open(sys.argv[1].split('.')[0]+".s", "w")
     lines = fin.readlines()
     print('Compiling......')
-    vardec, stmt = genAssembly(lines, fout)
-    writeassembly(stmt, vardec, fout)
+    vardec, stmt = icg_to_asm(lines, fout)
+    file_write(stmt, vardec, fout)
     fin.close()
     fout.close()
     print('Assembly code dumped to: ',sys.argv[1].split('.')[0]+".s")
