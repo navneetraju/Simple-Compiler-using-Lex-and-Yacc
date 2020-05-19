@@ -18,23 +18,59 @@ def variable_reg(stmt, regval, value):
     regval = (regval + 1)%13
     return stmt, regval, r1, r2
 
-def arith_op(stmt, lhs, arg1, op, arg2):
-    if(op == "+"):
-        st = "ADD "+"R"+str(lhs)+","+"R"+str(arg1)+",R"+str(arg2)
-        stmt.append(st)
-        
-    elif(op == "-"):
-        st = "SUBS "+"R"+str(lhs)+","+"R"+str(arg1)+",R"+str(arg2)
-        stmt.append(st)        
-        
-    elif(op == "*"):
-        st = "MUL "+"R"+str(lhs)+","+"R"+str(arg1)+",R"+str(arg2)
-        stmt.append(st)        
-        
-    elif(op == "/"):
-        st = "SDIV "+"R"+str(lhs)+","+"R"+str(arg1)+",R"+str(arg2)
-        stmt.append(st)   
-    return stmt
+def arith_op(stmt, lhs, arg1, op, arg2,type):
+    if(type==1):
+        if(arg1.isdigit()):
+            if(op == "+"):
+                st = "ADD "+"R"+str(lhs)+","+"#"+arg1+",R"+arg2
+                stmt.append(st)
+                
+            elif(op == "-"):
+                st = "SUBS "+"R"+str(lhs)+","+"#"+arg1+",R"+arg2
+                stmt.append(st)        
+                
+            elif(op == "*"):
+                st = "MUL "+"R"+str(lhs)+","+"#"+arg1+",R"+arg2
+                stmt.append(st)        
+                
+            elif(op == "/"):
+                st = "SDIV "+"R"+str(lhs)+","+"#"+arg1+",R"+arg2
+                stmt.append(st)   
+            return stmt
+        elif(arg2.isdigit()):
+            if(op == "+"):
+                st = "ADD "+"R"+str(lhs)+","+"R"+arg1+",#"+arg2
+                stmt.append(st)
+                
+            elif(op == "-"):
+                st = "SUBS "+"R"+str(lhs)+","+"R"+arg1+",#"+arg2
+                stmt.append(st)        
+                
+            elif(op == "*"):
+                st = "MUL "+"R"+str(lhs)+","+"R"+arg1+",#"+arg2
+                stmt.append(st)        
+                
+            elif(op == "/"):
+                st = "SDIV "+"R"+str(lhs)+","+"R"+arg1+",#"+arg2
+                stmt.append(st)   
+            return stmt
+    elif(type==2):
+            if(op == "+"):
+                st = "ADD "+"R"+str(lhs)+","+"R"+str(arg1)+",R"+str(arg2)
+                stmt.append(st)
+                
+            elif(op == "-"):
+                st = "SUBS "+"R"+str(lhs)+","+"R"+str(arg1)+",R"+str(arg2)
+                stmt.append(st)        
+                
+            elif(op == "*"):
+                st = "MUL "+"R"+str(lhs)+","+"R"+str(arg1)+",R"+str(arg2)
+                stmt.append(st)        
+                
+            elif(op == "/"):
+                st = "SDIV "+"R"+str(lhs)+","+"R"+str(arg1)+",R"+str(arg2)
+                stmt.append(st)   
+            return stmt
     
 def icg_to_asm(lines, file):
     vardec = []
@@ -61,30 +97,27 @@ def icg_to_asm(lines, file):
                 continue
             if(arg1.isdigit() and arg2.isdigit()):
                 stmt, regval, r1 = constant_reg(stmt, regval, arg1)
-                stmt, regval, r2 = constant_reg(stmt, regval, arg2)
                 stmt, regval, r3, r4 = variable_reg(stmt, regval, lhs)
-                stmt = arith_op(stmt, r4, r1, op, r2)
+                stmt = arith_op(stmt, r4, str(r1), op, arg2,1)
                 st = "STR R"+str(r4) + ", [R" + str(r3) + "]"
                 stmt.append(st)
             elif(arg1.isdigit()):
-                stmt, regval, r1 = constant_reg(stmt, regval, arg1)
                 stmt, regval, r2, r3 = variable_reg(stmt, regval, arg2)
                 stmt, regval, r4, r5 = variable_reg(stmt, regval, lhs)
-                stmt = arith_op(stmt, r5, r1, op, r3)
+                stmt = arith_op(stmt, r5, arg1, op, str(r3),1)
                 st = "STR R"+str(r5) + ", [R" + str(r4) + "]"
                 stmt.append(st)
             elif(arg2.isdigit()):
                 stmt, regval, r1,r2 = variable_reg(stmt, regval, arg1)
-                stmt, regval, r3 = constant_reg(stmt, regval, arg2)
                 stmt, regval, r4, r5 = variable_reg(stmt, regval, lhs)
-                stmt = arith_op(stmt, r5, r2, op, r3)
+                stmt = arith_op(stmt, r5, str(r2), op, arg2,1)
                 st = "STR R"+str(r5) + ", [R" + str(r4) + "]"
                 stmt.append(st)                
             else:
                 stmt, regval, r1,r2 = variable_reg(stmt, regval, arg1)
                 stmt, regval, r3,r4 = variable_reg(stmt, regval, arg2)
                 stmt, regval, r5,r6 = variable_reg(stmt, regval, lhs)
-                stmt = arith_op(stmt, r6, r2, op, r4)
+                stmt = arith_op(stmt, r6, r2, op, r4,2)
                 st = "STR R"+str(r6) + ", [R" + str(r5) + "]"
                 stmt.append(st)
         elif(len(i.split()) == 4):

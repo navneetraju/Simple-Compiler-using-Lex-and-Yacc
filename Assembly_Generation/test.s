@@ -1,0 +1,8 @@
+.text
+MOV R0,#1
+MOV R1,=t0
+MOV R2,[R1]
+ADD R2,#0,R2
+STR R2, [R1]
+SWI 0x011
+.DATA
