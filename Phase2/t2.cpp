@@ -1,6 +1,6 @@
 int main(){
 	//single line comment
-	int nume+2	
+	int nume=3;
 	int a=10;
 	int i=0;
 	for(i=0;i<10;i++)
@@ -11,7 +11,7 @@ int main(){
 		multi line
 	*/
 	int count=10;
-	while(count>0)
+	while(count1)
 	{
 		count--;
 	}

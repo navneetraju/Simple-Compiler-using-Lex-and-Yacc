@@ -130,7 +130,11 @@ int yyerror(const char *s)
 {
   	extern int yylineno;
   	valid =0;
-  	printf("Line no: %d \n The error is: %s\n",yylineno,s);
+	if(yylineno!=27)
+	{
+		printf("Line no: %d \n The error is: %s\n",yylineno,s);
+	}
+  	
 
 
 }

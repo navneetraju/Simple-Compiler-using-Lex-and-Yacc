@@ -1,1 +1,9 @@
-t0 = 1 + 2
+t0 = 1 
+t1 = 2
+t2 = t1 + t2
+t3 = t1 < t2
+ifFalse t3 goto L0:
+t3 = t3 + 1
+L0:
+t3 = t3 - 1
+

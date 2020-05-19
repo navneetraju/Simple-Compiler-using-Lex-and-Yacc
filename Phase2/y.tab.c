@@ -62,7 +62,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "yacc_phase3.y" /* yacc.c:339  */
+#line 1 "gram.y" /* yacc.c:339  */
 
  #include<stdio.h>
  int valid=1;
@@ -1598,7 +1598,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 126 "yacc_phase3.y" /* yacc.c:1906  */
+#line 126 "gram.y" /* yacc.c:1906  */
 
 
 #include <ctype.h>
@@ -1606,7 +1606,11 @@ int yyerror(const char *s)
 {
   	extern int yylineno;
   	valid =0;
-  	printf("Line no: %d \n The error is: %s\n",yylineno,s);
+	if(yylineno!=27)
+	{
+		printf("Line no: %d \n The error is: %s\n",yylineno,s);
+	}
+  	
 
 
 }
