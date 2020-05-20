@@ -85,7 +85,7 @@ def icg_to_asm(lines, file):
             stmt.append(i)
         
         elif(len(i.split()) == 2):
-            if(i.split()[0] == "GOTO"):
+            if(i.split()[0] == "goto"):
                 st = "B " + i.split()[1]
                 stmt.append(st)
             else:

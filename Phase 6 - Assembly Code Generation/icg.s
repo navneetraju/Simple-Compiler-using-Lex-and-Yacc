@@ -22,7 +22,7 @@ MOV R12,=i
 MOV R0,[R12]
 MOV R1,#t2
 STR R1, [R12]
-goto L0
+B L0
 L1:
 MOV R2,=a
 MOV R3,[R2]
